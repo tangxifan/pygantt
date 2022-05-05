@@ -59,7 +59,7 @@ def diff_date(start, end, unit):
 # Read color map from a csv file
 #####################################################################
 def read_color(csv_file):
-  color_dict = pd.read_csv(csv_file, header=None, index_col=0, skiprows=1, squeeze=True).to_dict()
+  color_dict = pd.read_csv(csv_file, header=None, index_col=0, skiprows=1).squeeze("columns").to_dict()
   return color_dict
 
 #####################################################################
@@ -141,11 +141,12 @@ def plot_data(df, time_unit, show_progress_bar):
 
   # Create custom x-ticks and x-tick labels
   interval = xtick_interval_map[time_unit]
-  xticks = np.arange(1, project_duration, interval)
-  xticks_labels = pd.date_range(start=project_start, end=project_end, freq=time_unit_map[time_unit], closed='left').strftime("%m/%d") 
-  #print(project_start)
-  #print(project_end)
-  #print(xticks_labels)
+  xticks = np.arange(0, project_duration - 1, interval)
+  xticks_labels = pd.date_range(start=project_start, end=project_end + dt.timedelta(days=1), freq=time_unit_map[time_unit], closed='left').strftime("%m/%d") 
+  print(project_start)
+  print(project_end)
+  print(xticks)
+  print(xticks_labels)
   xticks_minor = np.arange(1, project_duration, 1)
   
   # Create custom y-ticks and y-tick labels
@@ -225,7 +226,7 @@ def plot_data(df, time_unit, show_progress_bar):
   plt.gca().invert_yaxis()
   ax.set_xticks(xticks)
   ax.set_xticks(xticks_minor, minor=True)
-  ax.set_xticklabels(xticks_labels, fontsize='8')
+  ax.set_xticklabels(xticks_labels,fontsize='8')
 
   # Show grids
   plt.grid(axis='x')

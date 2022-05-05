@@ -1,28 +1,25 @@
 Task,start,duration,Department,Completion,description
-T1,2022/1/1,14,RS,0,Preparation
-M1,2022/1/14,1,RS,0,Complete setup
-T2,2022/1/1,90,RS,0,eFPGA arch. exploration 
-M2,2022/2/15,1,RS,0,Release 1st version of evaluation kit and eFPGA architecture
-M3,2022/3/15,1,RS,0,Release 2nd version of evaluation kit and eFPGA architecture
-M4,2022/3/31,1,RS,0,Finalized eFPGA architecture
-T3,2022/2/15,60,RS,0,eFPGA physical design
-M5,2022/3/15,1,RS,0,Complete DRC-clean eFPGA layout on 1st eFPGA release
-M6,2022/3/31,1,RS,0,Complete DRC-clean eFPGA layout on 2nd eFPGA release
-M7,2022/4/14,1,RS,0,Complete DRC-clean eFPGA layout on final eFPGA arch
-T4,2022/3/15,42,RS,0,eFPGA sign-off
-M8,2022/4/20,1,RS,0,Submit DRC-clean eFPGA layout for pre-check
-M9,2022/4/27,1,RS,0,Submit final eFPGA layout
-T5,2022/1/1,30,CS,0,High level design
-M10,2022/2/6,1,CS,0,Complete technolog/architecture decision and IP procurement
-T6,2022/2/7,56,CS,0,Initial logic design
-M11,2022/4/4,1,CS,0,Drop 1st synthesis netlist and sdc
-T7,2022/4/5,35,CS,0,Release to Floorplan
-M12,2022/5/10,1,CS,0,Complete physical design phase 1
-T8,2022/5/11,28,CS,0,Release to Preliminary
-M13,2022/6/1,1,CS,0,Logic design freeze
-M14,2022/6/8,1,CS,0,Complete physical design phase 2
-T9,2022/6/9,28,CS,0,Release to Layout
-M15,2022/7/7,1,CS,0,Complete physical design phase 3
-M16,2022/7/15,1,CS,0,Complete SoC SDF Simulation
-T10,2022/7/8,14,CS,0,Release to Manufacture
-M17,2022/7/23,1,CS,0,Complete GDS release to TSMC
+T-RS1,2022/5/9,14,RS,0,Upgrade VTR inside OpenFPGA
+T-RS2,2022/5/23,28,RS,0,Co-develop Tcl interface for OpenFPGA
+T-RF-HW1,2022/5/9,14,RF,0,Timing sign-off on eFPGA MPW
+T-RF-HW2,2022/5/9,14,RF,0,Timing extraction from eFPGA MPW and annotation to EDA engine
+T-RF-HW3,2022/5/23,28,RF,0,Automate timing extraction (Not universal)
+T-RF-HW4,2022/5/9,14,RF,0,Basic support on negative-edge FFs (both HW and SW)
+T-RF-HW5,2022/5/9,14,RF,0,IR-drop analysis on eFPGA MPW
+T-RF-HW6,2022/5/23,28,RF,0,Improve power grid for eFPGA
+T-RF-HW7,2022/5/23,14,RF,0,Buffer addition to corner SBs
+T-RF-HW8,2022/5/30,14,RF,0,Refine DSP block architectures
+T-RF-HW9,2022/5/30,14,RF,0,Refine BRAM block architectures (Optional)
+T-RF-HW10,2022/5/9,21,RF,0,Refine eFPGA pin location for SoC
+T-RF-HW11,2022/5/9,7,RF,0,Screenshot for the FPGA layouts
+T-RF-HW12,2022/6/20,14,RF,0,PD practice on architecture release
+T-RF-SW1,2022/5/9,7,RF,0,Clock/BRAM/DSP user guides release
+T-RF-SW2,2022/5/9,7,RF,0,EDA tool user manual release
+T-RF-SW3,2022/5/23,14,RF,0,Timing evaluation on application benchmarks
+T-RF-SW4,2022/5/9,7,RF,0,eFPGA pin constraint file format and EDA support
+T-RF-SW5,2022/5/16,7,RF,0,Finish-up eFPGA testing plan
+T-RF-SW6,2022/5/23,7,RF,0,Coverage testing methodology for eFPGA
+T-RF-SW7,2022/5/9,7,RF,0,RS Software SoW
+T-OS1,2022/5/9,7,OSFPGA,0,Flow Committee organizing
+T-OS2,2022/5/9,28,OSFPGA,0,OSFPGA book writing
+T-OS3,2022/5/9,7,OSFPGA,0,OSFPGA FCCM workshop preparation
