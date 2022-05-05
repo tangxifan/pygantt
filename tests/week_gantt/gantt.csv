@@ -1,0 +1,28 @@
+Task,start,duration,Department,Completion,description
+T1,2022/1/1,14,RS,0,Preparation
+M1,2022/1/14,1,RS,0,Complete setup
+T2,2022/1/1,90,RS,0,eFPGA arch. exploration 
+M2,2022/2/15,1,RS,0,Release 1st version of evaluation kit and eFPGA architecture
+M3,2022/3/15,1,RS,0,Release 2nd version of evaluation kit and eFPGA architecture
+M4,2022/3/31,1,RS,0,Finalized eFPGA architecture
+T3,2022/2/15,60,RS,0,eFPGA physical design
+M5,2022/3/15,1,RS,0,Complete DRC-clean eFPGA layout on 1st eFPGA release
+M6,2022/3/31,1,RS,0,Complete DRC-clean eFPGA layout on 2nd eFPGA release
+M7,2022/4/14,1,RS,0,Complete DRC-clean eFPGA layout on final eFPGA arch
+T4,2022/3/15,42,RS,0,eFPGA sign-off
+M8,2022/4/20,1,RS,0,Submit DRC-clean eFPGA layout for pre-check
+M9,2022/4/27,1,RS,0,Submit final eFPGA layout
+T5,2022/1/1,30,CS,0,High level design
+M10,2022/2/6,1,CS,0,Complete technolog/architecture decision and IP procurement
+T6,2022/2/7,56,CS,0,Initial logic design
+M11,2022/4/4,1,CS,0,Drop 1st synthesis netlist and sdc
+T7,2022/4/5,35,CS,0,Release to Floorplan
+M12,2022/5/10,1,CS,0,Complete physical design phase 1
+T8,2022/5/11,28,CS,0,Release to Preliminary
+M13,2022/6/1,1,CS,0,Logic design freeze
+M14,2022/6/8,1,CS,0,Complete physical design phase 2
+T9,2022/6/9,28,CS,0,Release to Layout
+M15,2022/7/7,1,CS,0,Complete physical design phase 3
+M16,2022/7/15,1,CS,0,Complete SoC SDF Simulation
+T10,2022/7/8,14,CS,0,Release to Manufacture
+M17,2022/7/23,1,CS,0,Complete GDS release to TSMC
