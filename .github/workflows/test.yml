@@ -26,7 +26,7 @@ jobs:
 
       - name: Install Python packages
         run: |
-          source install_python_packages.sh
+          bash .github/workflows/install_python_packages.sh
 
       - name: Generate gantt
         shell: bash
