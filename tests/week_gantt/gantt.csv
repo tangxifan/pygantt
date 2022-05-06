@@ -1,25 +1,7 @@
 Task,start,duration,Department,Completion,description
-T-RS1,2022/5/9,14,RS,0,Upgrade VTR inside OpenFPGA
-T-RS2,2022/5/23,28,RS,0,Co-develop Tcl interface for OpenFPGA
-T-RF-HW1,2022/5/9,14,RF,0,Timing sign-off on eFPGA MPW
-T-RF-HW2,2022/5/9,14,RF,0,Timing extraction from eFPGA MPW and annotation to EDA engine
-T-RF-HW3,2022/5/23,28,RF,0,Automate timing extraction (Not universal)
-T-RF-HW4,2022/5/9,14,RF,0,Basic support on negative-edge FFs (both HW and SW)
-T-RF-HW5,2022/5/9,14,RF,0,IR-drop analysis on eFPGA MPW
-T-RF-HW6,2022/5/23,28,RF,0,Improve power grid for eFPGA
-T-RF-HW7,2022/5/23,14,RF,0,Buffer addition to corner SBs
-T-RF-HW8,2022/5/30,14,RF,0,Refine DSP block architectures
-T-RF-HW9,2022/5/30,14,RF,0,Refine BRAM block architectures (Optional)
-T-RF-HW10,2022/5/9,21,RF,0,Refine eFPGA pin location for SoC
-T-RF-HW11,2022/5/9,7,RF,0,Screenshot for the FPGA layouts
-T-RF-HW12,2022/6/20,14,RF,0,PD practice on architecture release
-T-RF-SW1,2022/5/9,7,RF,0,Clock/BRAM/DSP user guides release
-T-RF-SW2,2022/5/9,7,RF,0,EDA tool user manual release
-T-RF-SW3,2022/5/23,14,RF,0,Timing evaluation on application benchmarks
-T-RF-SW4,2022/5/9,7,RF,0,eFPGA pin constraint file format and EDA support
-T-RF-SW5,2022/5/16,7,RF,0,Finish-up eFPGA testing plan
-T-RF-SW6,2022/5/23,7,RF,0,Coverage testing methodology for eFPGA
-T-RF-SW7,2022/5/9,7,RF,0,RS Software SoW
-T-OS1,2022/5/9,7,OSFPGA,0,Flow Committee organizing
-T-OS2,2022/5/9,28,OSFPGA,0,OSFPGA book writing
-T-OS3,2022/5/9,7,OSFPGA,0,OSFPGA FCCM workshop preparation
+T-OrgA1,2022/5/9,14,OrgA,0,T-OrgA1 Description
+T-OrgA2,2022/5/23,28,OrgA,0,T-OrgA2 Description
+T-OrgB1,2022/5/9,14,OrgB,0,T-OrgB1 Description
+T-OrgB2,2022/5/30,21,OrgB,0,T-OrgB2 Description
+T-OrgC1,2022/5/21,14,OrgC,0,T-OrgC1 Description
+T-OrgC2,2022/5/30,7,OrgC,0,T-OrgC2 Description

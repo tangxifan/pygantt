@@ -141,8 +141,8 @@ def plot_data(df, time_unit, show_progress_bar):
 
   # Create custom x-ticks and x-tick labels
   interval = xtick_interval_map[time_unit]
-  xticks = np.arange(0, project_duration - 1, interval)
-  xticks_labels = pd.date_range(start=project_start, end=project_end + dt.timedelta(days=1), freq=time_unit_map[time_unit], closed='left').strftime("%m/%d") 
+  xticks = np.arange(0, project_duration - 0, interval)
+  xticks_labels = pd.date_range(start=project_start, end=project_end, freq=time_unit_map[time_unit], closed='left').strftime("%m/%d") 
   print(project_start)
   print(project_end)
   print(xticks)
@@ -226,7 +226,7 @@ def plot_data(df, time_unit, show_progress_bar):
   plt.gca().invert_yaxis()
   ax.set_xticks(xticks)
   ax.set_xticks(xticks_minor, minor=True)
-  ax.set_xticklabels(xticks_labels,fontsize='8')
+  #ax.set_xticklabels(xticks_labels,fontsize='8')
 
   # Show grids
   plt.grid(axis='x')
