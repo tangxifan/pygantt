@@ -1,0 +1,31 @@
+name: Regression tests
+
+# Only run for pull requests as we care contribution to the master
+# - There are changes in RTL files
+on:
+  pull_request:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  detect_rtl_changes:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        test_name: ["week_gantt"]
+    steps:
+      - name: Cancel previous
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Checkout code
+        uses: actions/checkout@v2.1.0
+
+      - name: Generate gantt
+        shell: bash
+        run: |
+         cd tests/${{ matrix.test_name }}
+         make
