@@ -24,6 +24,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2.1.0
 
+      - name: Install Python packages
+        run: |
+          source install_python_packages.sh
+
       - name: Generate gantt
         shell: bash
         run: |
