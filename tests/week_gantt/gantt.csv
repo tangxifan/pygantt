@@ -1,4 +1,4 @@
-Task,start,duration,Department,Completion,description
+Task,Start,Duration,Resource,Completion,Description
 T-OrgA1,2022/5/9,14,OrgA,0,T-OrgA1 Description
 T-OrgA2,2022/5/23,28,OrgA,0,T-OrgA2 Description
 T-OrgB1,2022/5/9,14,OrgB,0,T-OrgB1 Description

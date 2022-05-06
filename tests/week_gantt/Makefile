@@ -5,7 +5,7 @@ GANTT_SCRIPT   = ../../scripts/pygantt.py
 export COMMENT_EXTRACT
 
 gantt:
-	$(PYTHON_EXEC) $(GANTT_SCRIPT) --input_csv gantt.csv --colormap_csv colormap.csv --output_figure gantt.jpg
+	$(PYTHON_EXEC) $(GANTT_SCRIPT) --input_csv gantt.csv --colormap_csv colormap.csv --output_figure gantt.svg
 
 # Functions to extract comments from Makefiles
 define COMMENT_EXTRACT

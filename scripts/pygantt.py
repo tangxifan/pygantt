@@ -8,6 +8,7 @@ import datetime as dt
 import logging
 import argparse
 import numpy as np
+import plotly.express as px
 
 #####################################################################
 # Initialize logger 
@@ -75,40 +76,37 @@ def read_data(csv_file):
 #####################################################################
 def process_data(df, sort_start_date, sort_department):
   # Convert dates to datetime format
-  df.start = pd.to_datetime(df.start)
+  df.Start = pd.to_datetime(df.Start)
 
   # If either 'duration' or 'end' can be accepted
   # - if 'duration' is defined while 'end' is not, 'end' will be caculated based on 'start' and 'duration'
   # Note: duration is always counted in days
   # - As long as 'end' is defined, we will calculate 'duration' based on 'start' and 'end' 
-  if ('duration' in df):
-    df.duration = pd.to_timedelta(df.duration, unit='D')
+  if ('Duration' in df):
+    df.Duration = pd.to_timedelta(df.Duration, unit='D')
 
-  if ('end' in df):
-    df.end = pd.to_datetime(df.end)
+  if ('Finish' in df):
+    df.Finish = pd.to_datetime(df.Finish)
   
   # Sort in ascending order of start date
   if (sort_start_date):
-    df = df.sort_values(by='start', ascending=True)
+    df = df.sort_values(by='Start', ascending=True)
   
-  # Sort based on Department
+  # Sort based on Resource
   if (sort_department):
-    df = df.sort_values(by='Department', 
+    df = df.sort_values(by='Resource', 
                         ascending=False).reset_index(drop=True)
 
   # Compute duration for each task in the unit of days
-  if ('duration' in df):
-    df['end'] = df.start + df.duration - pd.DateOffset(days=1)
+  if ('Duration' in df):
+    df['Finish'] = df.Start + df.Duration - pd.DateOffset(days=1)
   else:
-    df['duration'] = df.end - df.start
+    df['Duration'] = df.Finish - df.Start
 
-  df.duration = df.duration.apply(lambda x: x.days)
-
-  # Compute progress bar for each task
-  df['current_progress'] = round(df.Completion * df.duration / 100, 2)
+  df.Duration = df.Duration.apply(lambda x: x.days)
 
   # Force milestone duration to be 0
-  df.loc[df.Task.str.startswith("M"), 'duration'] = 0 
+  df.loc[df.Task.str.startswith("M"), 'Duration'] = 0 
 
   df.head()
 
@@ -117,131 +115,58 @@ def process_data(df, sort_start_date, sort_department):
 #####################################################################
 # Plot data into figures
 #####################################################################
-def plot_data(df, time_unit, show_progress_bar):
-  ################ 
-  # Basic concepts
-  # Critical variables to be computed when preprocessing the data for each task
-  #  
-  #      | relative_start  |<--width_completion-->|
-  #      |<--------------->|<---------------------+------------->|<--------->|
-  #      |                 |             task[i].duration        |           |
-  #      |                 |                                     |           |
-  #      |                 |                                     |           |
-  #      |          task[i].start                          task[i].end       |
-  #      |                                                                   |
-  # project_start                                                       project_end
-  
-  # Project level variables
-  project_start = df.start.min()
-  project_end = df.end.max()
-  project_duration = (project_end - project_start).days + 1
-  
-  # Compute relative date to the project start date
-  df['relative_start'] = df.start.apply(lambda x: (x - project_start).days)
+def plot_gantt(df, time_unit, show_progress_bar):
+  fig = px.timeline(df, x_start="Start", x_end="Finish", y="Task", color="Resource", text="Description")
+  fig.update_yaxes(autorange="reversed")
+  fig.update_layout(yaxis={"tickmode": "array", "tickvals": df.index, "ticktext": df.Task})
 
-  # Create custom x-ticks and x-tick labels
-  interval = xtick_interval_map[time_unit]
-  xticks = np.arange(0, project_duration - 0, interval)
-  xticks_labels = pd.date_range(start=project_start, end=project_end, freq=time_unit_map[time_unit], closed='left').strftime("%m/%d") 
-  print(project_start)
-  print(project_end)
-  print(xticks)
-  print(xticks_labels)
-  xticks_minor = np.arange(1, project_duration, 1)
-  
-  # Create custom y-ticks and y-tick labels
-  yticks = [i for i in range(len(df.Task))]
+  return fig
 
-  # create a column with the color for each department
-  df['color'] = df.apply(color, axis=1) 
-  
-  ###### PLOTTING GANTT CHART ######
-  fig, ax = plt.subplots(1, figsize=(16,6))
-  plt.title('Gantt Chart', size=18)
-
-  # Compute color ratio
-  default_color_alpha = 1
-  progress_bar_color_alpha = 1
-  if (show_progress_bar):
-    default_color_alpha = 0.4
-  
-  # Plot bars for tasks
-  for idx, row in df.iterrows():
-    if df.Task[idx].startswith("T"):
-      ax.barh(y=df.Task[idx], left=df.relative_start[idx], width=df.duration[idx],
-              color=df.color[idx], edgecolor='black', linewidth='2', alpha=default_color_alpha)
-      # Show texts for each task
-      if (row.relative_start + row.duration < 0.75 * project_duration):
-        ax.text(row.relative_start + row.duration + 0.5, idx, 
-                row.description,
-                color='black',
-                va='center', alpha=0.8,
-                horizontalalignment='left')
-      else:
-        ax.text(row.relative_start - 0.5, idx, 
-                row.description,
-                color='black',
-                va='center', alpha=0.8,
-                horizontalalignment='right')
-    elif df.Task[idx].startswith("M"):
-      ax.barh(y=df.Task[idx], left=df.relative_start[idx], width=df.duration[idx],
-              color='white', edgecolor='white', linewidth='2', alpha=default_color_alpha)
-      # Show texts for each milestone:
-      # - If the relative start + duration is less than 75%, we plot the text on the right side of the marker
-      # - If the relative start + duration is more than 75%, we plot the text on the left side of the marker
-      if (row.relative_start + row.duration < 0.75 * project_duration):
-        ax.text(row.relative_start + row.duration + 0.5, idx, 
-                row.description, 
-                va='center', alpha=0.8,
-                horizontalalignment='left')
-      else:
-        ax.text(row.relative_start + row.duration - 0.5, idx, 
-                row.description, 
-                va='center', alpha=0.8,
-                horizontalalignment='right')
-
-    # Plot milestone markers
-    if df.Task[idx].startswith("M"):
-      ax.plot(df.relative_start[idx], idx, color='tab:orange', marker='D', markersize='6')
-    # Plot milestone vertical lines which is easier for readers
-    if df.Task[idx].startswith("M"):
-      cur_ms_line_height = 1 - idx / len(df.Task)
-      plt.axvline(df.relative_start[idx], ymax=cur_ms_line_height, color='tab:orange', linestyle='--', linewidth='0.5')
-
-  # Plot progress bars for tasks
-  if (show_progress_bar):
-    for idx, row in df.iterrows():
-      if df.Task[idx].startswith("T"):
-        ax.barh(y=df.Task[idx], left=df.relative_start[idx], width=df.current_progress[idx],
-                color=df.color[idx], edgecolor='black', linewidth='2', alpha=progress_bar_color_alpha)
-        # Show texts on progress for each task
-        ax.text(row.relative_start + row.duration / 2, idx, 
-                f"{int(row.Completion*100)}%", 
-                color='white',
-                va='center', alpha=0.8)
-      elif df.Task[idx].startswith("M"):
-        ax.barh(y=df.Task[idx], left=df.relative_start[idx], width=df.current_progress[idx],
-                color='white', edgecolor='white', linewidth='2', alpha=progress_bar_color_alpha)
-
-  plt.gca().invert_yaxis()
-  ax.set_xticks(xticks)
-  ax.set_xticks(xticks_minor, minor=True)
-  #ax.set_xticklabels(xticks_labels,fontsize='8')
-
-  # Show grids
-  plt.grid(axis='x')
-  
-  # Legends
-  legend_elements = color_legends()
-  plt.legend(handles=legend_elements)
-
-  return plt
+#####################################################################
+# draw an arrow from the end of the first job to the start of the second job
+#####################################################################
+def draw_arrow_between_jobs(fig, first_job_dict, second_job_dict):
+    ## retrieve tick text and tick vals
+    print(fig.layout.yaxis)
+    print(fig.layout.yaxis)
+    job_yaxis_mapping = dict(zip(fig.layout.yaxis.ticktext, fig.layout.yaxis.tickvals))
+    jobs_delta = second_job_dict['Start'] - first_job_dict['Finish']
+    ## horizontal line segment
+    fig.add_shape(
+        x0=first_job_dict['Finish'], y0=job_yaxis_mapping[first_job_dict['Task']], 
+        x1=first_job_dict['Finish'] + jobs_delta/2, y1=job_yaxis_mapping[first_job_dict['Task']],
+        line=dict(color="blue", width=2)
+    )
+    ## vertical line segment
+    fig.add_shape(
+        x0=first_job_dict['Finish'] + jobs_delta/2, y0=job_yaxis_mapping[first_job_dict['Task']], 
+        x1=first_job_dict['Finish'] + jobs_delta/2, y1=job_yaxis_mapping[second_job_dict['Task']],
+        line=dict(color="blue", width=2)
+    )
+    ## horizontal line segment
+    fig.add_shape(
+        x0=first_job_dict['Finish'] + jobs_delta/2, y0=job_yaxis_mapping[second_job_dict['Task']], 
+        x1=second_job_dict['Start'], y1=job_yaxis_mapping[second_job_dict['Task']],
+        line=dict(color="blue", width=2)
+    )
+    ## draw an arrow
+    fig.add_annotation(
+        x=second_job_dict['Start'], y=job_yaxis_mapping[second_job_dict['Task']],
+        xref="x",yref="y",
+        showarrow=True,
+        ax=-10,
+        ay=0,
+        arrowwidth=2,
+        arrowcolor="blue",
+        arrowhead=2,
+    )
+    return fig
 
 #####################################################################
 # Plot data
 #####################################################################
-def save_figure(plt, image_name, image_format, image_dpi):
-  plt.savefig(image_name, format=image_format, dpi=image_dpi) 
+def save_figure(fig, image_name, image_format, image_dpi):
+  fig.write_image(image_name, format=image_format) 
 
 #####################################################################
 # Main function
@@ -277,5 +202,7 @@ if __name__ == '__main__':
   c_dict = read_color(args.colormap_csv)
   df = read_data(args.input_csv)
   df = process_data(df, args.sort_start_date, args.sort_department)
-  plt = plot_data(df, args.time_unit, args.progress_bar)
-  save_figure(plt, args.output_figure, 'jpg', 1200)
+  fig = plot_gantt(df, args.time_unit, args.progress_bar)
+  # Test: draw dependencies
+  fig = draw_arrow_between_jobs(fig, df.to_dict('index')[0], df.to_dict('index')[3])
+  save_figure(fig, args.output_figure, 'svg', 1200)
