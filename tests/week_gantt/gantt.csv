@@ -1,7 +1,7 @@
-Task,Start,Duration,Resource,Completion,Description
-T-OrgA1,2022/5/9,14,OrgA,0,T-OrgA1 Description
-T-OrgA2,2022/5/23,28,OrgA,0,T-OrgA2 Description
-T-OrgB1,2022/5/9,14,OrgB,0,T-OrgB1 Description
-T-OrgB2,2022/5/30,21,OrgB,0,T-OrgB2 Description
-T-OrgC1,2022/5/21,14,OrgC,0,T-OrgC1 Description
-T-OrgC2,2022/5/30,7,OrgC,0,T-OrgC2 Description
+Task,Start,Duration,Resource,Completion,Description,Dependencies
+T-OrgA1,2022/5/9,14,OrgA,0,T-OrgA1 Description,
+T-OrgA2,2022/5/23,28,OrgA,0,T-OrgA2 Description,T-OrgA1
+T-OrgB1,2022/5/9,14,OrgB,0,T-OrgB1 Description,
+T-OrgB2,2022/5/30,21,OrgB,0,T-OrgB2 Description,T-OrgA1;T-OrgB1
+T-OrgC1,2022/5/21,14,OrgC,0,T-OrgC1 Description,
+T-OrgC2,2022/5/30,7,OrgC,0,T-OrgC2 Description,T-OrgA2;T-OrgB2

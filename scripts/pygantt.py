@@ -127,8 +127,6 @@ def plot_gantt(df, time_unit, show_progress_bar):
 #####################################################################
 def draw_arrow_between_jobs(fig, first_job_dict, second_job_dict):
     ## retrieve tick text and tick vals
-    print(fig.layout.yaxis)
-    print(fig.layout.yaxis)
     job_yaxis_mapping = dict(zip(fig.layout.yaxis.ticktext, fig.layout.yaxis.tickvals))
     jobs_delta = second_job_dict['Start'] - first_job_dict['Finish']
     ## horizontal line segment
@@ -163,9 +161,29 @@ def draw_arrow_between_jobs(fig, first_job_dict, second_job_dict):
     return fig
 
 #####################################################################
-# Plot data
+# Draw lines between tasks to show dependencies, 
+# as defined in the Dependencies column in the dataframe
 #####################################################################
-def save_figure(fig, image_name, image_format, image_dpi):
+def draw_task_dependency_lines(fig, df):
+  # Walk through the Dependencie column for each task
+  for idx, row in df.iterrows():
+    # Bypass empty
+    dep_str = str(df.Dependencies[idx])
+    if (not dep_str):
+      continue
+    for prev_task in dep_str.split(";"):
+      prev_indices = df.index[df['Task'] == prev_task].to_list() 
+      if (not prev_indices):
+        continue
+      prev_idx = prev_indices[0]
+      fig = draw_arrow_between_jobs(fig, df.to_dict('index')[prev_idx], df.to_dict('index')[idx])
+
+  return fig
+
+#####################################################################
+# Save figure to a given file format
+#####################################################################
+def save_figure(fig, image_name, image_format):
   fig.write_image(image_name, format=image_format) 
 
 #####################################################################
@@ -203,6 +221,5 @@ if __name__ == '__main__':
   df = read_data(args.input_csv)
   df = process_data(df, args.sort_start_date, args.sort_department)
   fig = plot_gantt(df, args.time_unit, args.progress_bar)
-  # Test: draw dependencies
-  fig = draw_arrow_between_jobs(fig, df.to_dict('index')[0], df.to_dict('index')[3])
-  save_figure(fig, args.output_figure, 'svg', 1200)
+  fig = draw_task_dependency_lines(fig, df)
+  save_figure(fig, args.output_figure, 'svg')
